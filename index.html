@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D-панелі — каталог</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: веселий, впевнений магазин для швидкого ремонту своїми руками
+   IDEA: вітрина будівельного маркету з ціннику-стікерами і песиком-продавцем
+   PICTURE: песик-маскот біля стосу панелей зі стікером акційної ціни; плитки товарів — намальовані фактури
+   COLOUR and TYPE: сонячний жовтий, глибокий синій, білий; Unbounded для заголовків + Manrope
+   LAYOUT: банер акції → категорії → каталог з фільтрами → калькулятор на синьому → доставка → відгуки */
+:root{color-scheme:light dark;--bg:light-dark(#fffdf4,#0b1433);--ink:light-dark(#0f1f4b,#eef2ff);--mute:light-dark(#55607f,#a9b4d6);--card:light-dark(#fff,#132050);--line:light-dark(#e6e2d2,#24346a);--y:#ffd21f;--b:#0a55d0;--bd:#073a91;--r:#ff4d3d}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.logo b{font-family:Unbounded,system-ui,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:18px}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}.in{max-width:1240px;margin:0 auto}
+html{scroll-padding-top:80px;scroll-behavior:smooth}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+.btn{min-height:44px;padding:10px 20px;border-radius:999px;border:0;background:var(--b);color:#fff;font-weight:800;display:inline-flex;align-items:center;gap:8px;text-decoration:none;justify-content:center}
+.btn.y{background:var(--y);color:#0f1f4b}.btn.ghost{background:transparent;border:2px solid currentColor;color:inherit}
+.strip{background:var(--b);color:#fff;font-size:14px;text-align:center;padding:7px 12px}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:18px;padding:10px max(5vw,16px);max-width:1340px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}.logo b{font-size:17px}.logo small{display:block;font-size:12px;color:var(--mute)}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}nav a{color:inherit;text-decoration:none;font-weight:600;padding:10px 12px;border-radius:10px}nav a:hover{background:var(--line)}
+.cartb{position:relative}.cartb i{position:absolute;top:-6px;right:-6px;background:var(--r);color:#fff;font-style:normal;font-size:12px;min-width:22px;height:22px;border-radius:11px;display:grid;place-items:center}
+.hero{background:var(--y);color:#0f1f4b;position:relative;overflow:hidden}
+.hero .in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:24px;align-items:center}
+.tag{display:inline-block;background:var(--r);color:#fff;font-weight:800;padding:5px 14px;border-radius:999px;font-size:14px;transform:rotate(-2deg)}
+.hero h1{font-size:clamp(32px,5vw,54px);margin:16px 0 14px}.hero p{font-size:18px;max-width:34em;margin:0 0 20px}
+.hero .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.left{font-weight:800}
+.edit{position:absolute;right:max(5vw,16px);top:14px;background:#fff;color:#0f1f4b;border:0;border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;min-height:40px;box-shadow:0 2px 0 #0f1f4b}
+.fig{position:relative;min-height:340px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.cats{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+.cats button{flex:none;scroll-snap-align:start;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:10px 16px;min-height:48px;font-weight:800}
+.cats button span{color:var(--mute);font-weight:600;margin-left:6px}.cats button.on{background:var(--b);border-color:var(--b);color:#fff}.cats button.on span{color:#cfe0ff}
+.cat-wrap{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;margin-top:22px}
+.flt{align-self:start;position:sticky;top:84px}.flt h3{font-size:14px;margin:18px 0 8px;font-family:Manrope;font-weight:800}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;min-height:38px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.chip.on{border-color:var(--b);background:color-mix(in srgb,var(--b) 14%,var(--card))}.dot{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
+.search{width:100%;min-height:44px;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);font-size:16px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;color:var(--mute)}
+.bar select,.calc select,.calc input,.f input,.f select,.f textarea{min-height:44px;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;background:var(--card);font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s}
+.card:hover{transform:translateY(-3px)}.ph{position:relative;aspect-ratio:5/4;background:#eee}.ph svg{display:block;width:100%;height:100%}
+.badge{position:absolute;left:10px;top:10px;background:var(--y);color:#0f1f4b;font-weight:800;font-size:13px;padding:3px 10px;border-radius:999px}
+.badge.s{left:auto;right:10px;background:var(--r);color:#fff}
+.cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}.cb h3{font-family:Manrope;font-size:16px;font-weight:800;line-height:1.25}
+.meta{font-size:13px;color:var(--mute)}.pr{display:flex;align-items:baseline;gap:8px;margin-top:auto;padding-top:8px;white-space:nowrap}
+.pr b{font-size:22px;font-family:Unbounded}.pr s{color:var(--mute)}.pr small{color:var(--mute)}
+.add{margin-top:8px;width:100%}.empty{padding:40px;text-align:center;border:2px dashed var(--line);border-radius:20px;color:var(--mute)}
+.calc{background:var(--b);color:#fff}.calc .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:stretch}
+.calc label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}.calc input,.calc select{width:100%;background:#fff;color:#0f1f4b;border-color:transparent}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.res{background:var(--y);color:#0f1f4b;border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.big{font-family:Unbounded;font-size:clamp(44px,7vw,76px);line-height:1;font-weight:800;white-space:nowrap}
+.res dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:6px 0;font-size:15px}.res dd{margin:0;font-weight:800;text-align:right;white-space:nowrap}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}.box b{font-family:Unbounded;font-size:18px;display:block;margin-bottom:6px}
+.rev{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.rv{border:2px dashed var(--line);border-radius:20px;padding:20px;min-height:180px;display:flex;flex-direction:column;gap:10px;color:var(--mute)}
+.rv .ln{height:10px;border-radius:5px;background:var(--line)}
+footer{background:#0f1f4b;color:#dfe6ff}footer a{color:var(--y)}.ft{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.note{font-size:13px;color:var(--mute)}
+.ov{position:fixed;inset:0;background:rgba(6,14,40,.55);z-index:40;display:none}.ov.on{display:block}
+.drw{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--bg);z-index:41;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drw.on{transform:none}.dh{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}.dh h2{margin:0;font-size:22px}
+.x{width:44px;height:44px;border-radius:50%;border:0;background:var(--line);font-size:22px}
+.db{overflow:auto;padding:16px 20px;flex:1}
+.ci{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ci .ph{width:56px;height:56px;border-radius:10px;overflow:hidden;aspect-ratio:auto}.ci small{color:var(--mute)}
+.qty{display:flex;align-items:center;gap:4px}.qty button{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font-weight:800}
+.qty input{width:52px;text-align:center;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:var(--card)}
+.tot{display:flex;justify-content:space-between;font-weight:800;font-size:20px;margin:16px 0 4px}
+.f{display:grid;gap:10px;margin-top:12px}.f input,.f select,.f textarea{width:100%}
+.ok{background:color-mix(in srgb,var(--y) 35%,var(--bg));border-radius:16px;padding:14px;margin-top:12px}
+.ok pre{white-space:pre-wrap;font:13px/1.45 Manrope;margin:8px 0;max-height:180px;overflow:auto}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(480px,calc(100% - 24px));background:var(--bg);border-radius:24px;padding:22px;z-index:42;display:none}.modal.on{display:block}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,120px);background:#0f1f4b;color:#fff;padding:12px 20px;border-radius:999px;z-index:50;transition:transform .3s;font-weight:600}.toast.on{transform:translate(-50%,0)}
+.mflt{display:none}
+@media(max-width:900px){.cat-wrap{grid-template-columns:1fr}.flt{position:static;display:none}.flt.on{display:block}.mflt{display:inline-flex}.calc .in{grid-template-columns:1fr}nav a:not(.cartb){display:none}}
+@media(max-width:600px){.hero .in{grid-template-columns:1fr}.fig{min-height:260px;order:-1}.logo small{display:none}.edit{position:static;margin:0 0 12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cb{padding:10px}.pr b{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
+<linearGradient id="mir" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9f1f7"/><stop offset=".45" stop-color="#b8c6d3"/><stop offset=".55" stop-color="#f5f9fc"/><stop offset="1" stop-color="#9fb0c0"/></linearGradient>
+</defs></svg>
+
+<div class="strip">Без мінімального замовлення · Нова пошта та Укрпошта · Передоплата 200 грн</div>
+<header><div class="hd">
+  <a class="logo" href="#top"><svg width="44" height="44" viewBox="0 0 300 300"><use href="#doge"/></svg><span><b>3D Panels</b><small>@self_adhesive_3d_panels</small></span></a>
+  <nav><a href="#catalog">Каталог</a><a href="#calc">Калькулятор</a><a href="#delivery">Доставка</a><a href="#reviews">Відгуки</a></nav>
+  <button class="btn cartb" id="openCart" aria-label="Кошик">Кошик <i id="cnt">0</i></button>
+</div></header>
+
+<section class="band hero" id="top">
+  <button class="edit" id="editPromo">Змінити банер</button>
+  <div class="in">
+    <div>
+      <span class="tag" id="pTag"></span>
+      <h1 id="pTitle"></h1>
+      <p id="pText"></p>
+      <div class="row"><a class="btn" href="#catalog">Перейти до каталогу</a><a class="btn ghost" href="#calc">Порахувати панелі</a><span class="left" id="pLeft"></span></div>
+    </div>
+    <div class="fig"><svg viewBox="0 0 520 380" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Песик-маскот поруч зі стосом 3D-панелей">
+      <defs><g id="doge">
+        <ellipse cx="150" cy="250" rx="82" ry="48" fill="#e39a32"/>
+        <ellipse cx="150" cy="258" rx="44" ry="34" fill="#fff1d6"/>
+        <path d="M78 98 70 18 132 64Z" fill="#e39a32"/><path d="M222 98 230 18 168 64Z" fill="#e39a32"/>
+        <path d="M86 84 82 38 118 66Z" fill="#f8c97c"/><path d="M214 84 218 38 182 66Z" fill="#f8c97c"/>
+        <ellipse cx="150" cy="132" rx="94" ry="82" fill="#e9a23b"/>
+        <ellipse cx="150" cy="170" rx="70" ry="46" fill="#fff1d6"/>
+        <ellipse cx="116" cy="104" rx="11" ry="7" fill="#fff1d6"/><ellipse cx="184" cy="104" rx="11" ry="7" fill="#fff1d6"/>
+        <ellipse cx="118" cy="130" rx="10" ry="11" fill="#fff"/><ellipse cx="182" cy="130" rx="10" ry="11" fill="#fff"/>
+        <circle cx="113" cy="131" r="6.5" fill="#1b1b22"/><circle cx="177" cy="131" r="6.5" fill="#1b1b22"/>
+        <ellipse cx="150" cy="156" rx="14" ry="10" fill="#1b1b22"/><ellipse cx="146" cy="152" rx="4" ry="2.5" fill="#fff" opacity=".6"/>
+        <path d="M150 166v8M150 174q-14 14-30 4M150 174q14 14 30 4" stroke="#1b1b22" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M86 206h128l-64 44z" fill="#0a55d0"/><circle cx="130" cy="218" r="5" fill="#ffd21f"/><circle cx="160" cy="226" r="5" fill="#ffd21f"/><circle cx="148" cy="212" r="4" fill="#ffd21f"/>
+      </g></defs>
+      <ellipse cx="270" cy="352" rx="230" ry="18" fill="#0f1f4b" opacity=".12"/>
+      <g transform="translate(250 70) rotate(4)"><rect width="220" height="250" rx="10" fill="#0f1f4b" opacity=".15" transform="translate(10 12)"/><g id="heroTile"></g></g>
+      <g transform="translate(232 98) rotate(-5)"><rect width="200" height="230" rx="10" fill="#fff" stroke="#0f1f4b" stroke-width="3"/><g id="heroTile2"></g></g>
+      <use href="#doge" transform="translate(10 50) scale(1.02)"/>
+      <g transform="translate(400 60) rotate(10)"><circle r="62" fill="#ff4d3d"/><text text-anchor="middle" y="-10" fill="#fff" font-family="Manrope" font-weight="800" font-size="17" id="stOld">64 грн</text><text text-anchor="middle" y="24" fill="#fff" font-family="Unbounded" font-weight="800" font-size="30" id="stNew">49</text><text text-anchor="middle" y="44" fill="#fff" font-family="Manrope" font-weight="800" font-size="13">грн</text><line x1="-30" y1="-16" x2="30" y2="-16" stroke="#fff" stroke-width="2.5"/></g>
+    </svg></div>
+  </div>
+</section>
+
+<section class="band" id="catalog"><div class="in">
+  <h2>Каталог</h2>
+  <div class="cats" id="cats"></div>
+  <div class="cat-wrap">
+    <aside class="flt" id="flt">
+      <input class="search" id="q" type="search" placeholder="Пошук або артикул" aria-label="Пошук">
+      <h3>Колір</h3><div class="chips" id="fCol"></div>
+      <h3>Фактура</h3><div class="chips" id="fTex"></div>
+      <h3>Кімната</h3><div class="chips" id="fRoom"></div>
+      <button class="btn ghost" id="reset" style="margin-top:18px;width:100%">Скинути фільтри</button>
+    </aside>
+    <div>
+      <div class="bar"><span><button class="btn ghost mflt" id="mflt">Фільтри</button> <span id="found"></span></span>
+        <select id="sort" aria-label="Сортування"><option value="hit">Спершу хіти</option><option value="asc">Дешевші</option><option value="desc">Дорожчі</option><option value="sale">Зі знижкою</option></select></div>
+      <div class="grid" id="grid"></div>
+      <p class="note">Демо: назви, артикули й ціни умовні, крім панелі SW-00001908. Фото замінимо на ваші з Telegram-каталогу.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="band calc" id="calc"><div class="in">
+  <div>
+    <h2>Скільки панелей потрібно?</h2>
+    <p style="margin:0 0 6px;color:#dbe6ff">Введіть розміри стіни — порахуємо кількість із запасом і вартість.</p>
+    <label for="cProd">Товар</label><select id="cProd"></select>
+    <div class="two"><div><label for="cW">Ширина стіни, м</label><input id="cW" type="number" min="0" step="0.1" value="3.2" inputmode="decimal"></div>
+    <div><label for="cH">Висота стіни, м</label><input id="cH" type="number" min="0" step="0.1" value="2.6" inputmode="decimal"></div></div>
+    <div class="two"><div><label for="cO">Вікна й двері, м²</label><input id="cO" type="number" min="0" step="0.1" value="0" inputmode="decimal"></div>
+    <div><label for="cR">Запас на підрізку</label><select id="cR"><option value="0.05">+5%</option><option value="0.1" selected>+10% (рекомендовано)</option><option value="0.15">+15%</option></select></div></div>
+  </div>
+  <div class="res" aria-live="polite">
+    <span>Вам потрібно</span>
+    <div class="big" id="rN">0 шт</div>
+    <dl><dt>Площа стіни</dt><dd id="rA"></dd><dt>Площа однієї одиниці</dt><dd id="rU"></dd><dt>Вартість</dt><dd id="rC"></dd><dt id="rSt">Економія з акцією</dt><dd id="rS"></dd></dl>
+    <button class="btn" id="cAdd">Додати в кошик</button>
+    <span class="note" style="color:#3b4770">Розмір рулону шпалер у демо умовний — уточнимо з вашого прайсу.</span>
+  </div>
+</div></section>
+
+<section class="band" id="delivery"><div class="in">
+  <h2>Доставка й оплата</h2>
+  <div class="info">
+    <div class="box"><b>Нова пошта</b>Основний спосіб: у відділення, поштомат або кур'єром.</div>
+    <div class="box"><b>Укрпошта</b>Для тих, кому зручніше, — у будь-яке відділення.</div>
+    <div class="box"><b>Передоплата 200 грн</b>Відправляємо після передоплати 200 грн, решту — при отриманні.</div>
+    <div class="box"><b>Будь-яка кількість</b>Мінімального замовлення немає: можна взяти навіть одну панель.</div>
+  </div>
+</div></section>
+
+<section class="band" id="reviews" style="padding-top:0"><div class="in">
+  <h2>Відгуки покупців</h2>
+  <div class="rev">
+    <div class="rv"><b>Тут буде відгук з Instagram</b><div class="ln"></div><div class="ln" style="width:80%"></div><div class="ln" style="width:60%"></div><span class="note">Скріншот або текст з іменем покупця і фото стіни.</span></div>
+    <div class="rv"><b>Тут буде відгук з Instagram</b><div class="ln"></div><div class="ln" style="width:70%"></div><div class="ln" style="width:85%"></div><span class="note">Фото «до» і «після» працюють найкраще.</span></div>
+    <div class="rv"><b>Тут буде відгук з Instagram</b><div class="ln"></div><div class="ln" style="width:90%"></div><div class="ln" style="width:50%"></div><span class="note">Додамо реальні відгуки на етапі наповнення.</span></div>
+  </div>
+</div></section>
+
+<footer class="band"><div class="in ft">
+  <div><b style="font-family:Unbounded">3D Panels</b><br>Самоклеючі 3D-панелі, шпалери, ламінат і декор</div>
+  <div>Instagram: <a href="https://www.instagram.com/self_adhesive_3d_panels/">@self_adhesive_3d_panels</a><br>Telegram-каталог: <a href="https://t.me/self_adhesive_3d_panels">t.me/self_adhesive_3d_panels</a></div>
+</div></footer>
+
+<div class="ov" id="ov"></div>
+<aside class="drw" id="drw" aria-label="Кошик">
+  <div class="dh"><h2>Кошик</h2><button class="x" id="closeCart" aria-label="Закрити">×</button></div>
+  <div class="db" id="cartBody"></div>
+</aside>
+<div class="modal" id="modal" role="dialog" aria-label="Редагування банера">
+  <h2 style="font-size:22px">Банер акції</h2>
+  <div class="f">
+    <label>Мітка<input id="eTag"></label>
+    <label>Заголовок<input id="eTitle"></label>
+    <label>Текст<textarea id="eText" rows="3"></textarea></label>
+    <label>Діє до<input id="eTill" type="date"></label>
+    <div class="row" style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="eSave">Зберегти</button><button class="btn ghost" id="eCancel">Скасувати</button><button class="btn ghost" id="eReset">Як було</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+const $=s=>document.getElementById(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+const PROMO0={tag:'Акція тижня',title:'−23% на 3D-панель «Біла цегла»',text:'Панель 700×770 мм: було 64 грн, зараз 49 грн. Клеїться без клею й інструментів — оновіть кухню чи коридор за вечір.',till:'2026-11-30'};
+const CATS=[['all','Усі'],['panels','3D-панелі'],['wall','Шпалери'],['floor','Ламінат'],['mirror','Дзеркала'],['rail','Рейки'],['profile','Профілі'],['table','Столики']];
+const COL={white:['Білий','#f2eee6'],grey:['Сірий','#9aa1a8'],beige:['Бежевий','#d9bc8e'],black:['Чорний','#2e2e33'],blue:['Блакитний','#8cc4ec'],gold:['Золотий','#d6aa3a']};
+const TEX={brick:'Цегла',marble:'Мармур',wood:'Дерево',stone:'Камінь',wave:'Хвиля',plain:'Гладка'};
+const ROOM={kitchen:'Кухня',bath:'Ванна',bedroom:'Спальня',living:'Вітальня',kids:'Дитяча',hall:'Коридор'};
+const P=[
+{id:1,cat:'panels',n:'3D-панель «Біла цегла»',sku:'SW-00001908',size:'700×770×2 мм',u:'шт',area:.539,price:49,old:64,col:'white',tex:'brick',rooms:['kitchen','hall','living'],hit:1},
+{id:2,cat:'panels',n:'3D-панель «Сіра цегла»',sku:'SW-00001915',size:'700×770×3 мм',u:'шт',area:.539,price:58,col:'grey',tex:'brick',rooms:['kitchen','living','hall'],hit:1},
+{id:3,cat:'panels',n:'3D-панель «Білий мармур»',sku:'SW-00002031',size:'700×700×4 мм',u:'шт',area:.49,price:55,col:'white',tex:'marble',rooms:['bath','kitchen'],hit:1},
+{id:4,cat:'panels',n:'3D-панель «Світлий дуб»',sku:'SW-00002107',size:'700×770×4 мм',u:'шт',area:.539,price:62,col:'beige',tex:'wood',rooms:['bedroom','living']},
+{id:5,cat:'panels',n:'3D-панель «Хвиля»',sku:'SW-00002210',size:'700×700×3 мм',u:'шт',area:.49,price:52,col:'blue',tex:'wave',rooms:['kids','bath']},
+{id:6,cat:'panels',n:'3D-панель «Графітовий камінь»',sku:'SW-00002288',size:'700×770×5 мм',u:'шт',area:.539,price:68,old:79,col:'black',tex:'stone',rooms:['living','hall']},
+{id:7,cat:'wall',n:'Шпалери самоклеючі «Мармур»',sku:'WP-00000411',size:'рулон 0,6×5 м',u:'рул',area:3,price:189,old:229,col:'white',tex:'marble',rooms:['bath','kitchen'],hit:1},
+{id:8,cat:'wall',n:'Шпалери самоклеючі «Бетон»',sku:'WP-00000435',size:'рулон 0,6×5 м',u:'рул',area:3,price:159,col:'grey',tex:'stone',rooms:['living','hall'],hit:1},
+{id:9,cat:'wall',n:'Шпалери самоклеючі «Дерево»',sku:'WP-00000452',size:'рулон 0,6×5 м',u:'рул',area:3,price:175,col:'beige',tex:'wood',rooms:['bedroom','kids']},
+{id:10,cat:'floor',n:'Ламінат самоклеючий «Дуб»',sku:'FL-00000120',size:'152×914 мм',u:'шт',area:.139,price:36,col:'beige',tex:'wood',rooms:['living','bedroom','kids','hall']},
+{id:11,cat:'mirror',n:'Дзеркало акрилове самоклеюче',sku:'MR-00000077',size:'300×300 мм',u:'шт',price:85,col:'grey',tex:'plain',pic:'mirror',rooms:['bath','hall','bedroom']},
+{id:12,cat:'rail',n:'Рейки декоративні',sku:'RL-00000301',size:'2700×15×40 мм',u:'шт',price:95,col:'black',tex:'wood',pic:'rail',rooms:['living','bedroom']},
+{id:13,cat:'profile',n:'Алюмінієвий профіль для стиків',sku:'AL-00000058',size:'2,7 м',u:'шт',price:120,col:'gold',tex:'plain',pic:'profile',rooms:['kitchen','bath','living','hall']},
+{id:14,cat:'table',n:'Столик складаний',sku:'TB-00000012',size:'60×40 см',u:'шт',price:690,old:790,col:'white',tex:'plain',pic:'table',rooms:['living','kids']}];
+const byId=id=>P.find(p=>p.id==id);
+
+function pic(p,uid){
+  const c=COL[p.col][1],dk=p.col=='black',ln=dk?'rgba(255,255,255,.14)':'rgba(0,0,0,.14)',hl=dk?'rgba(255,255,255,.08)':'rgba(255,255,255,.5)';let g='';
+  const k=p.pic||p.tex;
+  if(k=='brick'){for(let r=0;r<8;r++)for(let i=-1;i<5;i++){const x=i*50+(r%2?25:0),y=r*20;g+=`<rect x="${x+2}" y="${y+2}" width="46" height="16" rx="2" fill="${c}" stroke="${ln}"/><line x1="${x+4}" y1="${y+3.5}" x2="${x+46}" y2="${y+3.5}" stroke="${hl}" stroke-width="2"/>`}g=`<rect width="200" height="160" fill="${ln}"/>`+g}
+  else if(k=='marble'){g=`<rect width="200" height="160" fill="${c}"/><g fill="none" stroke-linecap="round"><path d="M-10 40C40 20 70 75 120 52S180 20 215 34" stroke="${ln}" stroke-width="2"/><path d="M-5 110C30 96 60 130 100 112S160 86 210 120" stroke="${ln}" stroke-width="1.4"/><path d="M60 -5C70 30 50 60 80 90S90 140 70 170" stroke="#c9a64a" stroke-width="1.6" opacity=".7"/><path d="M150 0C140 40 170 70 150 100" stroke="${ln}" stroke-width="1"/></g>`}
+  else if(k=='wood'){g=`<rect width="200" height="160" fill="${c}"/>`;for(let r=0;r<5;r++){const y=r*32;g+=`<line x1="0" y1="${y}" x2="200" y2="${y}" stroke="${ln}" stroke-width="2"/><path d="M0 ${y+10}q50 -6 100 0t100 0M0 ${y+20}q60 5 120 0t80 0" stroke="${ln}" fill="none"/><line x1="${(r*67)%200}" y1="${y}" x2="${(r*67)%200}" y2="${y+32}" stroke="${ln}" stroke-width="2"/>`}}
+  else if(k=='stone'){const s=[[0,0,60,0,50,45,0,40],[60,0,130,0,120,50,50,45],[130,0,200,0,200,55,120,50],[0,40,50,45,40,100,0,95],[50,45,120,50,115,105,40,100],[120,50,200,55,200,110,115,105],[0,95,40,100,55,160,0,160],[40,100,115,105,125,160,55,160],[115,105,200,110,200,160,125,160]];g=`<rect width="200" height="160" fill="${ln}"/>`+s.map((a,i)=>`<polygon points="${a.join(' ')}" fill="${c}" stroke="${ln}" stroke-width="5" stroke-linejoin="round" opacity="${.85+(i%3)*.05}"/>`).join('')}
+  else if(k=='wave'){g=`<rect width="200" height="160" fill="${c}"/>`;for(let y=0;y<180;y+=20)g+=`<path d="M-10 ${y}q25 -12 50 0t50 0t50 0t50 0t50 0" fill="none" stroke="${hl}" stroke-width="7"/><path d="M-10 ${y+5}q25 -12 50 0t50 0t50 0t50 0t50 0" fill="none" stroke="${ln}" stroke-width="3"/>`}
+  else if(k=='mirror'){g=`<rect width="200" height="160" fill="#dfe6ee"/><rect x="30" y="20" width="140" height="120" rx="6" fill="url(#mir)" stroke="#8a97a6" stroke-width="3"/><path d="M60 30 90 30 50 130 30 130Z" fill="#fff" opacity=".45"/>`}
+  else if(k=='rail'){g=`<rect width="200" height="160" fill="#efe9de"/>`;for(let x=8;x<200;x+=22)g+=`<rect x="${x}" y="0" width="14" height="160" fill="${c}"/><rect x="${x}" y="0" width="3" height="160" fill="${hl}"/>`}
+  else if(k=='profile'){g=`<rect width="200" height="160" fill="#eef1f5"/>`;for(let i=0;i<3;i++)g+=`<g transform="translate(${30+i*14} ${30+i*14})"><path d="M0 0h140v12H12v90H0Z" fill="${c}"/><path d="M0 0h140v3H3v99H0Z" fill="#fff" opacity=".5"/></g>`}
+  else if(k=='table'){g=`<rect width="200" height="160" fill="#e9eef6"/><ellipse cx="100" cy="140" rx="70" ry="8" fill="#000" opacity=".1"/><rect x="35" y="55" width="130" height="14" rx="4" fill="${c}" stroke="#c5c9d2"/><path d="M50 69 70 138M150 69 130 138M70 69 50 138M130 69 150 138" stroke="#9aa1aa" stroke-width="5" stroke-linecap="round"/>`}
+  else g=`<rect width="200" height="160" fill="${c}"/>`;
+  return `<svg viewBox="0 0 200 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${g}<rect width="200" height="160" fill="url(#sh)"/></svg>`;
+}
+
+/* банер */
+let promo=store.get('promo',PROMO0);
+function drawPromo(){
+  $('pTag').textContent=promo.tag;$('pTitle').textContent=promo.title;$('pText').textContent=promo.text;
+  const d=Math.ceil((new Date(promo.till+'T23:59:59')-new Date())/864e5);
+  $('pLeft').textContent=promo.till?(d>0?`Залишилось ${d} дн.`:'Акція завершилась'):'';
+}
+const tile=pic(P[0]).replace('<svg ','<svg width="200" height="230" ');
+$('heroTile2').innerHTML=tile;$('heroTile').innerHTML=pic(P[1]).replace('<svg ','<svg width="220" height="250" ');
+$('editPromo').onclick=()=>{$('eTag').value=promo.tag;$('eTitle').value=promo.title;$('eText').value=promo.text;$('eTill').value=promo.till;$('modal').classList.add('on');$('ov').classList.add('on')};
+const closeAll=()=>{$('modal').classList.remove('on');$('drw').classList.remove('on');$('ov').classList.remove('on')};
+$('eCancel').onclick=closeAll;$('ov').onclick=closeAll;
+$('eSave').onclick=()=>{promo={tag:$('eTag').value.trim()||'Акція',title:$('eTitle').value.trim(),text:$('eText').value.trim(),till:$('eTill').value};store.set('promo',promo);drawPromo();closeAll();toast('Банер оновлено')};
+$('eReset').onclick=()=>{promo={...PROMO0};store.set('promo',promo);drawPromo();closeAll()};
+document.addEventListener('keydown',e=>{if(e.key=='Escape')closeAll()});
+
+/* каталог */
+const st={cat:'all',col:new Set(),tex:new Set(),room:new Set(),q:'',sort:'hit'};
+function chips(el,obj,set,isCol){el.innerHTML=Object.entries(obj).map(([k,v])=>`<button class="chip${set.has(k)?' on':''}" data-k="${k}" aria-pressed="${set.has(k)}">${isCol?`<span class="dot" style="background:${v[1]}"></span>${v[0]}`:v}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;const k=b.dataset.k;set.has(k)?set.delete(k):set.add(k);render()}}
+function render(){
+  $('cats').innerHTML=CATS.map(([k,v])=>`<button class="${st.cat==k?'on':''}" data-k="${k}">${v}<span>${k=='all'?P.length:P.filter(p=>p.cat==k).length}</span></button>`).join('');
+  chips($('fCol'),COL,st.col,1);chips($('fTex'),TEX,st.tex);chips($('fRoom'),ROOM,st.room);
+  const q=st.q.toLowerCase();
+  let L=P.filter(p=>(st.cat=='all'||p.cat==st.cat)&&(!st.col.size||st.col.has(p.col))&&(!st.tex.size||st.tex.has(p.tex))&&(!st.room.size||p.rooms.some(r=>st.room.has(r)))&&(!q||(p.n+' '+p.sku).toLowerCase().includes(q)));
+  const s=st.sort;L.sort((a,b)=>s=='asc'?a.price-b.price:s=='desc'?b.price-a.price:s=='sale'?(!!b.old-!!a.old):((b.hit||0)-(a.hit||0)));
+  $('found').textContent=`Знайдено: ${L.length}`;
+  $('grid').innerHTML=L.length?L.map(p=>`<article class="card"><div class="ph">${pic(p)}${p.hit?'<span class="badge">Хіт</span>':''}${p.old?`<span class="badge s">−${Math.round((1-p.price/p.old)*100)}%</span>`:''}</div>
+   <div class="cb"><h3>${p.n}</h3><span class="meta">${p.size} · ${p.sku}</span><span class="meta">${COL[p.col][0]} · ${TEX[p.tex]}</span>
+   <div class="pr"><b>${p.price} грн</b>${p.old?`<s>${p.old}</s>`:''}<small>/ ${p.u}</small></div><button class="btn add" data-id="${p.id}">У кошик</button></div></article>`).join('')
+   :`<div class="empty">Нічого не знайшли за цими фільтрами.<br><button class="btn" style="margin-top:12px" id="reset2">Скинути фільтри</button></div>`;
+  const r2=$('reset2');if(r2)r2.onclick=reset;
+}
+function reset(){st.cat='all';st.col.clear();st.tex.clear();st.room.clear();st.q='';$('q').value='';render()}
+$('cats').onclick=e=>{const b=e.target.closest('button');if(b){st.cat=b.dataset.k;render()}};
+$('q').oninput=e=>{st.q=e.target.value;render()};$('sort').onchange=e=>{st.sort=e.target.value;render()};
+$('reset').onclick=reset;$('mflt').onclick=()=>$('flt').classList.toggle('on');
+$('grid').onclick=e=>{const b=e.target.closest('.add');if(b)add(+b.dataset.id,1)};
+
+/* калькулятор */
+const CP=P.filter(p=>p.area);
+$('cProd').innerHTML=CP.map(p=>`<option value="${p.id}">${esc(p.n)} — ${p.size}, ${p.price} грн</option>`).join('');
+const fm=n=>n.toLocaleString('uk-UA',{maximumFractionDigits:2});
+let calcN=0;
+function calc(){
+  const p=byId($('cProd').value),w=+$('cW').value||0,h=+$('cH').value||0,o=+$('cO').value||0,r=+$('cR').value;
+  const a=Math.max(0,w*h-o);calcN=a?Math.ceil(a*(1+r)/p.area):0;
+  $('rN').textContent=`${calcN} ${p.u}`;$('rA').textContent=`${fm(a)} м²`;$('rU').textContent=`${fm(p.area)} м²`;$('rC').textContent=`${fm(calcN*p.price)} грн`;
+  $('rSt').style.display=$('rS').style.display=p.old?'':'none';$('rS').textContent=p.old?`${fm(calcN*(p.old-p.price))} грн`:'';
+  $('cAdd').textContent=calcN?`Додати ${calcN} ${p.u} у кошик`:'Введіть розміри';$('cAdd').disabled=!calcN;
+}
+['cProd','cW','cH','cO','cR'].forEach(i=>$(i).addEventListener('input',calc));
+$('cAdd').onclick=()=>calcN&&add(+$('cProd').value,calcN);
+
+/* кошик */
+let cart=store.get('cart',{});let sent='';
+function add(id,n){cart[id]=(cart[id]||0)+n;save();toast(`Додано: ${byId(id).n}`)}
+function save(){store.set('cart',cart);const c=Object.values(cart).reduce((a,b)=>a+b,0);$('cnt').textContent=c;drawCart()}
+function total(){return Object.entries(cart).reduce((s,[id,q])=>s+byId(id).price*q,0)}
+function drawCart(){
+  const E=Object.entries(cart);
+  if(!E.length&&!sent){$('cartBody').innerHTML=`<div class="empty">Кошик порожній.<br>Додайте панелі з каталогу або з калькулятора.</div>`;return}
+  $('cartBody').innerHTML=E.map(([id,q])=>{const p=byId(id);return `<div class="ci"><div class="ph">${pic(p)}</div><div><b>${p.n}</b><br><small>${p.size} · ${p.price} грн/${p.u}</small>
+   <div class="qty"><button data-d="-1" data-id="${id}" aria-label="Менше">−</button><input value="${q}" data-id="${id}" inputmode="numeric" aria-label="Кількість"><button data-d="1" data-id="${id}" aria-label="Більше">+</button></div></div><b style="white-space:nowrap">${fm(p.price*q)} грн</b></div>`}).join('')+
+   (E.length?`<div class="tot"><span>Разом</span><span>${fm(total())} грн</span></div><p class="note">Передоплата 200 грн, решта — при отриманні.</p>
+   <form class="f" id="of"><input id="oN" placeholder="Ім'я та прізвище" required autocomplete="name"><input id="oP" type="tel" placeholder="Телефон, +380…" required autocomplete="tel">
+   <input id="oC" placeholder="Місто" required><select id="oD"><option>Нова пошта</option><option>Укрпошта</option></select><input id="oB" placeholder="Відділення або адреса" required>
+   <textarea id="oM" rows="2" placeholder="Коментар (необов'язково)"></textarea><button class="btn" type="submit">Оформити в Telegram</button></form>`:'')+
+   (sent?`<div class="ok"><b>Замовлення готове.</b> Надішліть його менеджеру в Telegram:<pre>${esc(sent)}</pre><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn" target="_blank" rel="noopener" href="https://t.me/share/url?url=${encodeURIComponent('https://t.me/self_adhesive_3d_panels')}&text=${encodeURIComponent(sent)}">Відкрити Telegram</a><button class="btn ghost" id="cp">Скопіювати текст</button></div></div>`:'');
+  const f=$('of');if(f)f.onsubmit=order;const cp=$('cp');if(cp)cp.onclick=()=>navigator.clipboard.writeText(sent).then(()=>toast('Скопійовано'),()=>toast('Виділіть текст і скопіюйте вручну'));
+}
+$('cartBody').addEventListener('click',e=>{const b=e.target.closest('button[data-d]');if(!b)return;const id=b.dataset.id;cart[id]=(cart[id]||0)+ +b.dataset.d;if(cart[id]<=0)delete cart[id];save()});
+$('cartBody').addEventListener('change',e=>{const i=e.target.closest('.qty input');if(!i)return;const v=Math.max(0,parseInt(i.value)||0);v?cart[i.dataset.id]=v:delete cart[i.dataset.id];save()});
+function order(e){e.preventDefault();
+  const lines=Object.entries(cart).map(([id,q],i)=>{const p=byId(id);return `${i+1}. ${p.n} (${p.sku}) — ${q} ${p.u} × ${p.price} грн = ${p.price*q} грн`});
+  sent=`Нове замовлення з сайту\n${lines.join('\n')}\nРазом: ${total()} грн\n\nІм'я: ${$('oN').value}\nТелефон: ${$('oP').value}\nДоставка: ${$('oD').value}, ${$('oC').value}, ${$('oB').value}`+($('oM').value?`\nКоментар: ${$('oM').value}`:'');
+  cart={};save();
+}
+$('openCart').onclick=()=>{$('drw').classList.add('on');$('ov').classList.add('on')};$('closeCart').onclick=closeAll;
+
+let tt;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),1800)}
+
+drawPromo();render();calc();save();
+}
+</script>
+</body>
+</html>
